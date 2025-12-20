@@ -640,3 +640,6 @@ resource "aws_route53_record" "api" {
     evaluate_target_health = true
   }
 }
+# Networking, ECS, RDS, S3, and CloudFront resources will live here.
+# This baseline keeps the repo ready for Terraform without making
+# assumptions about your target VPC or networking strategy.
