@@ -18,11 +18,21 @@ variable "vpc_id" {
 variable "public_subnet_ids" {
   type        = list(string)
   description = "Existing public subnet IDs for ALB."
+
+  validation {
+    condition     = length(var.public_subnet_ids) > 0
+    error_message = "Provide at least one public subnet ID."
+  }
 }
 
 variable "private_subnet_ids" {
   type        = list(string)
   description = "Existing private subnet IDs for ECS tasks and Aurora."
+
+  validation {
+    condition     = length(var.private_subnet_ids) > 0
+    error_message = "Provide at least one private subnet ID."
+  }
 }
 
 variable "db_name" {

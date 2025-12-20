@@ -53,6 +53,17 @@ You will need the following values from your AWS account:
   - `api.yourdomain.com` for ALB
 - **Aurora MySQL password** (master password)
 
+### Finding existing VPC and subnet IDs
+
+If you already have networking in place, you can pull the IDs with the AWS CLI:
+
+```bash
+aws ec2 describe-vpcs --query "Vpcs[].VpcId" --output text
+aws ec2 describe-subnets --filters "Name=vpc-id,Values=vpc-xxxxxxxx" --query "Subnets[].{id:SubnetId,az:AvailabilityZone}" --output table
+```
+
+Use public subnets for the ALB and private subnets for ECS + Aurora.
+
 ### Terraform variables
 
 Copy the example file and update the values:
