@@ -118,3 +118,8 @@ Each service has a dedicated Dockerfile and can be built for ECS/Fargate:
 ```bash
 docker build -t users-service ./services/users
 ```
+
+## Next steps
+
+- Flesh out Terraform to match your AWS account defaults (VPC/subnets, domains, IAM role).
+- Wire services to Aurora MySQL with SQLAlchemy models and migrations.
