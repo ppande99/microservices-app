@@ -277,6 +277,7 @@ resource "aws_lb_listener_rule" "catalog" {
   }
 }
 
+resource "aws_iam_role" "ecs_task_execution" {
 resource "aws_ecs_task_execution_role" "main" {
   name = "${var.project_name}-ecs-exec"
   assume_role_policy = jsonencode({
@@ -295,6 +296,7 @@ resource "aws_ecs_task_execution_role" "main" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_exec" {
+  role       = aws_iam_role.ecs_task_execution.name
   role       = aws_ecs_task_execution_role.main.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
@@ -305,6 +307,7 @@ resource "aws_ecs_task_definition" "users" {
   memory                   = "512"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
+  execution_role_arn        = aws_iam_role.ecs_task_execution.arn
   execution_role_arn        = aws_ecs_task_execution_role.main.arn
 
   container_definitions = jsonencode([
@@ -343,6 +346,7 @@ resource "aws_ecs_task_definition" "orders" {
   memory                   = "512"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
+  execution_role_arn        = aws_iam_role.ecs_task_execution.arn
   execution_role_arn        = aws_ecs_task_execution_role.main.arn
 
   container_definitions = jsonencode([
@@ -381,6 +385,7 @@ resource "aws_ecs_task_definition" "catalog" {
   memory                   = "512"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
+  execution_role_arn        = aws_iam_role.ecs_task_execution.arn
   execution_role_arn        = aws_ecs_task_execution_role.main.arn
 
   container_definitions = jsonencode([
@@ -476,6 +481,7 @@ resource "aws_ecs_service" "catalog" {
   depends_on = [aws_lb_listener.https]
 }
 
+resource "aws_db_subnet_group" "main" {
 resource "aws_rds_cluster_subnet_group" "main" {
   name       = "${var.project_name}-db-subnet-group"
   subnet_ids = var.private_subnet_ids
@@ -489,6 +495,7 @@ resource "aws_rds_cluster" "main" {
   database_name           = var.db_name
   master_username         = var.db_username
   master_password         = var.db_password
+  db_subnet_group_name    = aws_db_subnet_group.main.name
   db_subnet_group_name    = aws_rds_cluster_subnet_group.main.name
   vpc_security_group_ids  = [aws_security_group.db.id]
   backup_retention_period = 3
