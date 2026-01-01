@@ -1,6 +1,6 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="orders-service")
@@ -44,3 +44,11 @@ async def create_order(order: dict):
     record = {"id": new_id, **order}
     FAKE_ORDERS.append(record)
     return record
+
+
+@app.delete("/orders/{order_id}")
+async def delete_order(order_id: int):
+    for index, order in enumerate(FAKE_ORDERS):
+        if order["id"] == order_id:
+            return FAKE_ORDERS.pop(index)
+    raise HTTPException(status_code=404, detail="Order not found")

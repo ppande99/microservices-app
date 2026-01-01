@@ -134,16 +134,53 @@ export default function App() {
     }
   };
 
-  const handleRemoveUser = (id) => {
-    setUsers((prev) => prev.filter((user) => user.id !== id));
+  const deleteJson = async (path) => {
+    const response = await fetch(`${apiBaseUrl}${path}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error(`Request failed: ${response.status}`);
+    }
+    return response.json();
   };
 
-  const handleRemoveOrder = (id) => {
-    setOrders((prev) => prev.filter((order) => order.id !== id));
+  const handleRemoveUser = async (id) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await deleteJson(`/users/${id}`);
+      setUsers((prev) => prev.filter((user) => user.id !== id));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleRemoveCatalog = (id) => {
-    setCatalog((prev) => prev.filter((item) => item.id !== id));
+  const handleRemoveOrder = async (id) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await deleteJson(`/orders/${id}`);
+      setOrders((prev) => prev.filter((order) => order.id !== id));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleRemoveCatalog = async (id) => {
+    setLoading(true);
+    setError(null);
+    try {
+      await deleteJson(`/catalog/${id}`);
+      setCatalog((prev) => prev.filter((item) => item.id !== id));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

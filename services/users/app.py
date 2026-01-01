@@ -1,6 +1,6 @@
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="users-service")
@@ -44,3 +44,11 @@ async def create_user(user: dict):
     record = {"id": new_id, **user}
     FAKE_USERS.append(record)
     return record
+
+
+@app.delete("/users/{user_id}")
+async def delete_user(user_id: int):
+    for index, user in enumerate(FAKE_USERS):
+        if user["id"] == user_id:
+            return FAKE_USERS.pop(index)
+    raise HTTPException(status_code=404, detail="User not found")

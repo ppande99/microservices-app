@@ -1,6 +1,8 @@
 import os
 
-from fastapi import FastAPI
+from uuid import uuid4
+
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="catalog-service")
@@ -40,6 +42,15 @@ async def list_catalog():
 
 @app.post("/catalog")
 async def create_item(item: dict):
-    record = {"id": item.get("id"), **item}
+    item_id = item.get("id") or f"sku-{uuid4().hex[:8]}"
+    record = {**item, "id": item_id}
     FAKE_CATALOG.append(record)
     return record
+
+
+@app.delete("/catalog/{item_id}")
+async def delete_item(item_id: str):
+    for index, item in enumerate(FAKE_CATALOG):
+        if item["id"] == item_id:
+            return FAKE_CATALOG.pop(index)
+    raise HTTPException(status_code=404, detail="Item not found")
