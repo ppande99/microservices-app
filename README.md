@@ -6,6 +6,8 @@ This repo scaffolds a basic microservices architecture:
 - **Backend services**: Python/FastAPI microservices packaged for ECS Fargate.
 - **Database**: MySQL (local via Docker, production via Aurora MySQL on RDS).
 - **Infra**: Terraform configuration for AWS resources.
+- **Database**: MySQL (local via Docker, production via RDS).
+- **Infra**: Terraform skeleton for AWS resources.
 
 ## Repository layout
 
