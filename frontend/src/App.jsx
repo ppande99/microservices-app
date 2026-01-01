@@ -121,6 +121,7 @@ export default function App() {
     setError(null);
     try {
       const record = await postJson("/catalog", {
+        id: `sku-${catalog.length + 1}`,
         name: formState.catalogName,
         price: Number(formState.catalogPrice || 0),
       });
