@@ -35,6 +35,16 @@ variable "private_subnet_ids" {
   }
 }
 
+variable "private_route_table_ids" {
+  type        = list(string)
+  description = "Route table IDs for private subnets (used by S3 gateway endpoint)."
+
+  validation {
+    condition     = length(var.private_route_table_ids) > 0
+    error_message = "Provide at least one private route table ID."
+  }
+}
+
 variable "db_name" {
   type        = string
   description = "Aurora MySQL database name."

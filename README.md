@@ -49,6 +49,7 @@ You will need the following values from your AWS account:
 - **VPC ID** (existing VPC)
 - **Public subnet IDs** (for ALB)
 - **Private subnet IDs** (for ECS tasks + Aurora)
+- **Private route table IDs** (for VPC endpoints/S3 gateway)
 - **Route53 hosted zone ID** (for DNS validation and alias records)
 - **Custom domains**
   - `app.yourdomain.com` for CloudFront
@@ -100,6 +101,7 @@ Create the following GitHub repository secrets:
 - `AWS_VPC_ID`
 - `AWS_PUBLIC_SUBNET_IDS` (JSON array string, e.g. `["subnet-aaa","subnet-bbb"]`)
 - `AWS_PRIVATE_SUBNET_IDS` (JSON array string, e.g. `["subnet-ccc","subnet-ddd"]`)
+- `AWS_PRIVATE_ROUTE_TABLE_IDS` (JSON array string, e.g. `["rtb-111","rtb-222"]`)
 - `ROUTE53_ZONE_ID`
 - `FRONTEND_DOMAIN_NAME` (e.g. `app.example.com`)
 - `API_DOMAIN_NAME` (e.g. `api.example.com`)
@@ -125,5 +127,3 @@ docker build -t users-service ./services/users
 
 - Flesh out Terraform to match your AWS account defaults (VPC/subnets, domains, IAM role).
 - Wire services to Aurora MySQL with SQLAlchemy models and migrations.
-- Flesh out Terraform in `infra/` to provision VPC, ECS, RDS, S3, and CloudFront.
-- Wire services to MySQL (RDS) with SQLAlchemy models and migrations.
