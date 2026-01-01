@@ -6,7 +6,16 @@ terraform {
       version = ">= 5.0"
     }
   }
+
+  backend "s3" {
+    bucket         = "amatechie-microservices-tfstate"
+    key            = "microservices-app/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "amatechie-microservices-tflock"
+    encrypt        = true
+  }
 }
+
 
 provider "aws" {
   region = var.aws_region
@@ -366,7 +375,8 @@ resource "aws_ecs_task_definition" "users" {
   memory                   = "512"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  execution_role_arn        = aws_iam_role.ecs_task_execution.arn
+  execution_role_arn       = aws_iam_role.ecs_task_execution.arn
+ 
 
   container_definitions = jsonencode([
     {
@@ -404,7 +414,8 @@ resource "aws_ecs_task_definition" "orders" {
   memory                   = "512"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  execution_role_arn        = aws_iam_role.ecs_task_execution.arn
+  execution_role_arn       = aws_iam_role.ecs_task_execution.arn
+  
 
   container_definitions = jsonencode([
     {
@@ -442,7 +453,8 @@ resource "aws_ecs_task_definition" "catalog" {
   memory                   = "512"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  execution_role_arn        = aws_iam_role.ecs_task_execution.arn
+  execution_role_arn       = aws_iam_role.ecs_task_execution.arn
+  
 
   container_definitions = jsonencode([
     {
@@ -546,7 +558,6 @@ resource "aws_db_subnet_group" "main" {
 resource "aws_rds_cluster" "main" {
   cluster_identifier      = "${var.project_name}-aurora"
   engine                  = "aurora-mysql"
-  engine_version          = "8.0.mysql_aurora.3.05.2"
   database_name           = var.db_name
   master_username         = var.db_username
   master_password         = var.db_password
@@ -701,3 +712,6 @@ resource "aws_route53_record" "api" {
     evaluate_target_health = true
   }
 }
+# Networking, ECS, RDS, S3, and CloudFront resources will live here.
+# This baseline keeps the repo ready for Terraform without making
+# assumptions about your target VPC or networking strategy.
