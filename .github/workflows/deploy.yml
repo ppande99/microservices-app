@@ -21,6 +21,7 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.destroy != 'true' }}
     env:
       AWS_REGION: us-east-1
       TF_VAR_project_name: microservices-app
