@@ -1,11 +1,29 @@
+import os
+
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="orders-service")
 
 FAKE_ORDERS = [
     {"id": 101, "item": "Keyboard", "quantity": 1},
     {"id": 102, "item": "Mouse", "quantity": 2},
+    {"id": 103, "item": "Standing Desk", "quantity": 1},
 ]
+
+allowed_origins = [
+    origin.strip()
+    for origin in os.getenv("ALLOWED_ORIGINS", "*").split(",")
+    if origin.strip()
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins or ["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/health")
