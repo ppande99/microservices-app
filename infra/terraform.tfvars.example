@@ -1,0 +1,14 @@
+aws_region         = "us-east-1"
+project_name       = "microservices-app"
+vpc_id             = "vpc-xxxxxxxx"
+public_subnet_ids  = ["subnet-aaaaaaa", "subnet-bbbbbbb"]
+private_subnet_ids = ["subnet-ccccccc", "subnet-ddddddd"]
+private_route_table_ids = ["rtb-11111111", "rtb-22222222"]
+
+db_name     = "app"
+db_username = "app"
+db_password = "change-me"
+
+api_domain_name = "api.example.com"
+domain_name     = "app.example.com"
+route53_zone_id = "Z1234567890"
