@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  users:
+    build: ./services/users
+    ports:
+      - "8001:8000"
+    environment:
+      - PORT=8000
+      - DB_HOST=db
+      - DB_USER=app
+      - DB_PASSWORD=app
+      - DB_NAME=app
+
+  orders:
+    build: ./services/orders
+    ports:
+      - "8002:8000"
+    environment:
+      - PORT=8000
+      - DB_HOST=db
+      - DB_USER=app
+      - DB_PASSWORD=app
+      - DB_NAME=app
+
+  catalog:
+    build: ./services/catalog
+    ports:
+      - "8003:8000"
+    environment:
+      - PORT=8000
+      - DB_HOST=db
+      - DB_USER=app
+      - DB_PASSWORD=app
+      - DB_NAME=app
+
+  api-gateway:
+    image: nginx:1.27-alpine
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - users
+      - orders
+      - catalog
+
+  db:
+    image: mysql:8.4
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=app
+      - MYSQL_USER=app
+      - MYSQL_PASSWORD=app
+    ports:
+      - "3306:3306"
