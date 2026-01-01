@@ -393,7 +393,8 @@ resource "aws_ecs_task_definition" "users" {
         { name = "DB_HOST", value = aws_rds_cluster.main.endpoint },
         { name = "DB_USER", value = var.db_username },
         { name = "DB_PASSWORD", value = var.db_password },
-        { name = "DB_NAME", value = var.db_name }
+        { name = "DB_NAME", value = var.db_name },
+        { name = "ALLOWED_ORIGINS", value = "https://${var.domain_name}" }
       ]
       logConfiguration = {
         logDriver = "awslogs"
@@ -432,7 +433,8 @@ resource "aws_ecs_task_definition" "orders" {
         { name = "DB_HOST", value = aws_rds_cluster.main.endpoint },
         { name = "DB_USER", value = var.db_username },
         { name = "DB_PASSWORD", value = var.db_password },
-        { name = "DB_NAME", value = var.db_name }
+        { name = "DB_NAME", value = var.db_name },
+        { name = "ALLOWED_ORIGINS", value = "https://${var.domain_name}" }
       ]
       logConfiguration = {
         logDriver = "awslogs"
@@ -471,7 +473,8 @@ resource "aws_ecs_task_definition" "catalog" {
         { name = "DB_HOST", value = aws_rds_cluster.main.endpoint },
         { name = "DB_USER", value = var.db_username },
         { name = "DB_PASSWORD", value = var.db_password },
-        { name = "DB_NAME", value = var.db_name }
+        { name = "DB_NAME", value = var.db_name },
+        { name = "ALLOWED_ORIGINS", value = "https://${var.domain_name}" }
       ]
       logConfiguration = {
         logDriver = "awslogs"
@@ -712,6 +715,3 @@ resource "aws_route53_record" "api" {
     evaluate_target_health = true
   }
 }
-# Networking, ECS, RDS, S3, and CloudFront resources will live here.
-# This baseline keeps the repo ready for Terraform without making
-# assumptions about your target VPC or networking strategy.

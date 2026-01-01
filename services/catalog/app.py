@@ -17,10 +17,12 @@ allowed_origins = [
     if origin.strip()
 ]
 
+allow_credentials = "*" not in allowed_origins
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins or ["*"],
-    allow_credentials=True,
+    allow_credentials=allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
