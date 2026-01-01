@@ -4,6 +4,15 @@ on:
   push:
     branches: ["main"]
   workflow_dispatch:
+    inputs:
+      destroy:
+        description: "Destroy Terraform-managed infrastructure"
+        required: true
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
 
 permissions:
   id-token: write
@@ -44,6 +53,11 @@ jobs:
       - name: Terraform init
         working-directory: infra
         run: terraform init
+
+      - name: Terraform destroy
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.destroy == 'true' }}
+        working-directory: infra
+        run: terraform destroy -auto-approve
 
       - name: Terraform apply (ECR only)
         working-directory: infra
