@@ -6,7 +6,16 @@ terraform {
       version = ">= 5.0"
     }
   }
+
+  backend "s3" {
+    bucket         = "amatechie-microservices-tfstate"
+    key            = "microservices-app/terraform.tfstate"
+    region         = "us-east-1"
+    dynamodb_table = "amatechie-microservices-tflock"
+    encrypt        = true
+  }
 }
+
 
 provider "aws" {
   region = var.aws_region
